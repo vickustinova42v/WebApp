@@ -1,6 +1,6 @@
 ## Проект для системной инженерии
 
-Выполнить(на MacOS):
+Выполнить(на MacOS через bash):
 
 1. sudo python3 -m venv venv
 2. source venv/bin/activate 
