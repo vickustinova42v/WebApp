@@ -4,33 +4,11 @@ import urllib.parse
 import os
 import sqlite3
 from http import cookies
+from Init import init_db, DB_NAME
 import uuid
 
 PORT = 8000
-DB_NAME = "library.db"
 SESSIONS = {}
-
-def init_db():
-    conn = sqlite3.connect(DB_NAME)
-    c = conn.cursor()
-    c.execute('''
-        CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT UNIQUE NOT NULL,
-            password TEXT NOT NULL,
-            role TEXT NOT NULL CHECK(role IN ('reader', 'admin')) DEFAULT 'reader'
-        )
-
-        CREATE TABLE IF NOT EXISTS books (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL,
-            author TEXT NOT NULL,
-            year INTEGER NOT NULL,
-            is_taken INTEGER NOT NULL DEFAULT 0  -- 0: доступна, 1: взята в аренду
-        )
-    ''')
-    conn.commit()
-    conn.close()
 
 class Handler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
@@ -40,9 +18,9 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             user = self.get_current_user()
             if user:
                 self.send_response(200)
-                self.send_header("Content-type", "text/html; charset=utf-8")  # ← добавили charset=utf-8
+                self.send_header("Content-type", "text/html; charset=utf-8")
                 self.end_headers()
-                self.wfile.write(f"<h1>Привет, {user}!</h1>".encode("utf-8"))  # ← обязательно кодировать в utf-8
+                self.wfile.write(f"<h1>Привет, {user}!</h1>".encode("utf-8"))
             else:
                 self.redirect('/login.html')
             return
