@@ -19,6 +19,10 @@ def delete_books_html(book_id):
 
     return f"""
     <html>
+    <head>
+        <title>{message}</title>
+        <link rel="stylesheet" href="/style.css">
+    </head>
     <body>
         <h1>{message}</h1>
         <a href='/'>На главную</a>
