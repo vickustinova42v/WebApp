@@ -64,13 +64,13 @@ def init_db():
     if reader_id_row:
         user_id = reader_id_row[0]
 
-        # 6. Две книги
-        c.execute("SELECT id FROM books WHERE is_taken = 0 LIMIT 2")
-        book_ids = [row[0] for row in c.fetchall()]
+    # 6. Две книги
+    c.execute("SELECT id FROM books WHERE is_taken = 0 LIMIT 2")
+    book_ids = [row[0] for row in c.fetchall()]
 
-        for book_id in book_ids:
-            c.execute("INSERT OR IGNORE INTO user_books (user_id, book_id) VALUES (?, ?)", (user_id, book_id))
-            c.execute("UPDATE books SET is_taken = 1 WHERE id = ?", (book_id,))
+    for book_id in book_ids:
+        c.execute("INSERT OR IGNORE INTO user_books (user_id, book_id) VALUES (?, ?)", (user_id, book_id))
+        c.execute("UPDATE books SET is_taken = 1 WHERE id = ?", (book_id,))
 
     conn.commit()
     conn.close()
