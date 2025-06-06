@@ -41,3 +41,10 @@ button:hover {
 h2, p {
     text-align: center;
 }
+
+.regisrtation_page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
