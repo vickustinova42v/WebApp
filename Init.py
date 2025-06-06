@@ -6,7 +6,6 @@ def init_db():
     conn = sqlite3.connect(DB_NAME)
     c = conn.cursor()
 
-    # 1. Создаём таблицы
     c.execute('''
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -36,17 +35,14 @@ def init_db():
         )
     ''')
 
-    # 2. Админ
     c.execute("SELECT id FROM users WHERE username = 'admin'")
     if not c.fetchone():
         c.execute("INSERT INTO users (username, password, role) VALUES (?, ?, ?)", ('admin', 'admin', 'admin'))
 
-    # 3. Reader
     c.execute("SELECT id FROM users WHERE username = 'reader1'")
     if not c.fetchone():
         c.execute("INSERT INTO users (username, password, role) VALUES (?, ?, ?)", ('reader1', 'reader1', 'reader'))
 
-    # 4. Книги
     c.execute("SELECT COUNT(*) FROM books")
     if c.fetchone()[0] == 0:
         books = [
@@ -58,13 +54,11 @@ def init_db():
         ]
         c.executemany("INSERT INTO books (name, author, year) VALUES (?, ?, ?)", books)
 
-    # 5. Получаем ID reader1
     c.execute("SELECT id FROM users WHERE username = 'reader1'")
     reader_id_row = c.fetchone()
     if reader_id_row:
         user_id = reader_id_row[0]
 
-    # 6. Две книги
     c.execute("SELECT id FROM books WHERE is_taken = 0 LIMIT 2")
     book_ids = [row[0] for row in c.fetchall()]
 

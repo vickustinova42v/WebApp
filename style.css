@@ -1,65 +1,29 @@
-body {
-    background-color: #f0f8ff;
-    font-family: Arial, sans-serif;
-    color: #003366;
-    margin: 0;
-    padding: 0;
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
-header, h1 {
-    background-color: #0066cc;
+.delete-button {
     color: white;
-    padding: 20px;
-    text-align: center;
-}
-
-main {
-    padding: 20px;
-    max-width: 600px;
-    margin: 30px auto;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 102, 204, 0.1);
-}
-
-form {
-    display: flex;
-    flex-direction: column;
-}
-
-label {
-    margin: 10px 0 5px;
-}
-
-input {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-button {
-    margin-top: 20px;
-    padding: 10px;
-    background-color: #0066cc;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #005bb5;
-}
-
-a {
-    color: #0066cc;
+    background-color: #d9534f;
+    padding: 5px 10px;
     text-decoration: none;
+    border-radius: 4px;
 }
 
-a:hover {
-    text-decoration: underline;
+.delete-button:hover {
+    background-color: #c9302c;
 }
 
-ul {
-    padding-left: 20px;
+.change-button {
+    color: white;
+    background-color: #243cc2;
+    padding: 5px 10px;
+    text-decoration: none;
+    border-radius: 4px;
+}
+
+.change-button:hover {
+    background-color: #1c2f99;
 }
