@@ -20,19 +20,6 @@ class Handler(Handler):
         self.end_headers()
         self.wfile.write(html_str.encode('utf-8'))
 
-    def delete_book(self, book_id):
-        import sqlite3
-        conn = sqlite3.connect('library.db')
-        cursor = conn.cursor()
-        cursor.execute("DELETE FROM books WHERE id = ?", (book_id,))
-        conn.commit()
-        conn.close()
-
-        # После удаления – редирект обратно на главную
-        self.send_response(303)
-        self.send_header('Location', '/')
-        self.end_headers()
-
     def do_GET(self):
         parsed_path = urlparse(self.path)
         path = parsed_path.path
