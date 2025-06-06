@@ -105,6 +105,7 @@ public class BooksHandler {
 
     public static class DeleteBookHandler implements HttpHandler {
         public void handle(HttpExchange exchange) throws IOException {
+
             Integer uid = getUserIdFromRequest(exchange);
             if (uid == null) {
                 exchange.sendResponseHeaders(401, -1);
@@ -112,20 +113,23 @@ public class BooksHandler {
             }
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(exchange.getRequestBody()));
-            int bookId = Integer.parseInt(reader.readLine().split("=")[1]);
+            String[] parts = reader.readLine().split("=");
+            int bookId = Integer.parseInt(parts[1]);
 
             try (Connection conn = Database.getConnection()) {
-                PreparedStatement check = conn.prepareStatement("SELECT is_rented FROM books WHERE id=?");
-                check.setInt(1, bookId);
-                ResultSet rs = check.executeQuery();
+                PreparedStatement checkStmt = conn.prepareStatement("SELECT is_rented FROM books WHERE id = ?");
+                checkStmt.setInt(1, bookId);
+                ResultSet rs = checkStmt.executeQuery();
+
                 if (rs.next() && rs.getInt("is_rented") == 1) {
-                    exchange.sendResponseHeaders(403, -1);
+                    exchange.sendResponseHeaders(400, -1); // Книга в аренде — удаление запрещено
                     return;
                 }
 
-                PreparedStatement ps = conn.prepareStatement("DELETE FROM books WHERE id=?");
+                PreparedStatement ps = conn.prepareStatement("DELETE FROM books WHERE id = ?");
                 ps.setInt(1, bookId);
                 ps.executeUpdate();
+
                 exchange.sendResponseHeaders(200, -1);
             } catch (SQLException e) {
                 exchange.sendResponseHeaders(500, -1);

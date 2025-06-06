@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Каталог книг</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>📚 Каталог книг</h1>
+    <div id="user-info"></div>
+    <table id="books-table">
+        <thead>
+            <tr>
+                <th>Название</th>
+                <th>Автор</th>
+                <th>Статус</th>
+                <th>Действие</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <div id="admin-actions" style="display:none;">
+        <h2>Добавить книгу</h2>
+        <form id="add-book-form">
+            <input type="text" name="title" placeholder="Название" required>
+            <input type="text" name="author" placeholder="Автор" required>
+            <button type="submit">Добавить</button>
+        </form>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Регистрация</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>📝 Регистрация</h1>
+    <form id="register-form">
+        <input type="text" name="username" placeholder="Логин" required><br>
+        <input type="password" name="password" placeholder="Пароль" required><br>
+        <select name="role" required>
+            <option value="">Выберите роль</option>
+            <option value="user">Читающий</option>
+            <option value="admin">Администратор</option>
+        </select><br>
+        <button type="submit">Зарегистрироваться</button>
+    </form>
+    <p>Уже есть аккаунт? <a href="index.html">Войти</a></p>
+
+    <script>
+        document.getElementById("register-form").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const data = new URLSearchParams(new FormData(e.target));
+            const res = await fetch("/register", { method: "POST", body: data });
+            if (res.ok) {
+                alert("Регистрация успешна! Выполните вход.");
+                window.location.href = "index.html";
+            } else {
+                alert("Ошибка регистрации");
+            }
+        });
+    </script>
+</body>
+</html>
