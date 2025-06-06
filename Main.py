@@ -7,7 +7,7 @@ from Get import get_books_html
 from Delete import delete_books_html
 
 class MyTCPServer(socketserver.TCPServer):
-    allow_reuse_address = True  # ← ЭТО КЛЮЧ
+    allow_reuse_address = True
 
 PORT = 8000
 
