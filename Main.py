@@ -29,6 +29,13 @@ class Handler(Handler):
         if path == '/':
             books_html = get_books_html()
             self.send_html(books_html)
+        
+        elif path == "/style.css":
+            self.send_response(200)
+            self.send_header('Content-type', 'text/css')
+            self.end_headers()
+            with open('static/style.css', 'rb') as file:
+                self.wfile.write(file.read())
 
         elif path == '/delete':
             book_id = query.get('id', [None])[0]
@@ -40,14 +47,17 @@ class Handler(Handler):
             open_book_html = open_new_book_form()
             self.send_html(open_book_html)
         else:
-            self.send_error(404, "Страница не найдена")
+            self.send_error(404)
 
     def do_POST(self):
         parsed_path = urlparse(self.path)
         path = parsed_path.path
 
         if path == '/create':
-            return
+            content_length = int(self.headers['Content-Length'])
+            post_data = self.rfile.read(content_length).decode('utf-8')
+            data = parse_qs(post_data)
+            save_new_book_form(data)
         else:
             self.send_html("<h1>Ошибка: неправильно заполнили форму.</h1>")
 

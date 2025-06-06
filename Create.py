@@ -1,9 +1,10 @@
+import sqlite3
+
 def open_new_book_form():
     return f"""
     <html>
     <head>
-        <title>1</title>
-        <link rel="stylesheet" href="/style.css">
+        <title>Создание новой книги</title>
     </head>
     <body>
         <form action="/create" method="POST">
@@ -23,16 +24,15 @@ def open_new_book_form():
     </html>
     """
 
-def save_new_book_form():
-    return f"""
-    <html>
-    <head>
-        <title>1</title>
-        <link rel="stylesheet" href="/style.css">
-    </head>
-    <body>
-        <h1>1</h1>
-        <a href='/'>На главную</a>
-    </body>
-    </html>
-    """
+def save_new_book_form(data):
+    name = data.get('name', [''])[0]
+    author = data.get('author', [''])[0]
+    year = data.get('year', [''])[0]
+
+    if name and author and year.isdigit():
+        year = int(year)
+        conn = sqlite3.connect('library.db')
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO books (name, author, year) VALUES (?, ?, ?)", (name, author, year))
+        conn.commit()
+        conn.close()
