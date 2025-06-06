@@ -1,16 +1,11 @@
-# База данных
 library.db
 
-# Логи
 *.log
 
-# Кэш Python
 __pycache__/
 *.pyc
 
-# Временные файлы редактора
 *.swp
 *.tmp
 
-# Системные файлы macOS
 .DS_Store
