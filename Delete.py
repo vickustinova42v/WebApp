@@ -8,7 +8,6 @@ def delete_books_html(book_id):
     result = cursor.fetchone()
 
     if result:
-        name, author = result
         cursor.execute("DELETE FROM books WHERE id = ?", (book_id,))
         conn.commit()
 
