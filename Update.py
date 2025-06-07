@@ -3,7 +3,7 @@ import sqlite3
 def open_update_book_form(book_id):
     conn = sqlite3.connect('library.db')
     cursor = conn.cursor()
-    cursor.execute("SELECT name, author, year FROM books WHERE id = ?", (book_id,))
+    cursor.execute("SELECT name, author, year FROM books WHERE id = ?", (book_id))
     book = cursor.fetchone()
     conn.close()
 

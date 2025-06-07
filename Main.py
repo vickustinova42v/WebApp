@@ -6,6 +6,7 @@ from Init import init_db, DB_NAME
 from Read import get_books_html
 from Delete import delete_books_html
 from Update import open_update_book_form, save_updated_book_form
+from Rent import rent_book, return_book
 from Create import open_new_book_form, save_new_book_form
 from Utils import get_logged_in_user
 from Auth import get_login_form, get_register_form, register_user, authenticate_user, logout_user
@@ -103,6 +104,26 @@ class Handler(Handler):
             if book_id:
                 html = open_update_book_form(book_id)
                 self.send_html(html)
+
+        elif path == '/rent':
+            user_id = get_logged_in_user(self)
+            if not user_id:
+                self.redirect("/login")
+                return
+            book_id = query.get('id', [None])[0]
+            if book_id:
+                rent_book(book_id, user_id)
+                self.redirect('/')
+
+        elif path == '/return':
+            user_id = get_logged_in_user(self)
+            if not user_id:
+                self.redirect("/login")
+                return
+            book_id = query.get('id', [None])[0]
+            if book_id:
+                return_book(book_id, user_id)
+                self.redirect('/')
         
         elif path == "/logout":
             user_id = get_logged_in_user(self)

@@ -4,7 +4,7 @@ def get_books_html(user_id):
     conn = sqlite3.connect("library.db")
     cursor = conn.cursor()
 
-    cursor.execute("SELECT username, role FROM users WHERE id = ?", (user_id,))
+    cursor.execute("SELECT username, role FROM users WHERE id = ?", (user_id))
     result = cursor.fetchone()
     username = result[0] if result else "Незнакомец"
     role = result[1] if result else "reader"
