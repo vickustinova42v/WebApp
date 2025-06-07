@@ -55,7 +55,7 @@ def get_books_html(user_id):
         if role == "admin" and not is_taken:
             html += f"""
                 <a class="delete-button" href="/delete?id={book_id}">Удалить</a>
-                <a class="change-button" href="/change?id={book_id}">Изменить</a>
+                <a class="change-button" href="/update?id={book_id}">Изменить</a>
             """
 
         if role == "reader" and not is_taken:
