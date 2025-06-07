@@ -79,7 +79,7 @@ def authenticate_user(data, handler):
         if user:
             user_id = user[0]
             handler.send_response(302)
-            handler.send_header('Set-Cookie', f'user_id={user_id}; Path=/')
+            handler.send_header('Set-Cookie', f'user_id={user_id}; Path=/; HttpOnly')
             handler.send_header('Location', '/')
             handler.end_headers()
         else:
@@ -104,6 +104,6 @@ def authenticate_user(data, handler):
 
 def logout_user(handler):
     handler.send_response(302)
-    handler.send_header('Set-Cookie', 'user_id=; Path=/; Max-Age=0')
+    handler.send_header('Set-Cookie', 'user_id=; Path=/; Max-Age=0; HttpOnly')
     handler.send_header('Location', '/login')
     handler.end_headers()
