@@ -34,14 +34,10 @@ def init_db():
             PRIMARY KEY (user_id, book_id)
         )
     ''')
-
+    
     c.execute("SELECT id FROM users WHERE username = 'admin'")
     if not c.fetchone():
-        c.execute("INSERT INTO users (username, password, role) VALUES (?, ?, ?)", ('admin', 'admin', 'admin'))
-
-    c.execute("SELECT id FROM users WHERE username = 'reader1'")
-    if not c.fetchone():
-        c.execute("INSERT INTO users (username, password, role) VALUES (?, ?, ?)", ('reader1', 'reader1', 'reader'))
+        c.execute("INSERT INTO users (username, password, role) VALUES (?, ?, ?)", ('admin','adminc', 'admin'))
 
     c.execute("SELECT COUNT(*) FROM books")
     if c.fetchone()[0] == 0:
@@ -63,18 +59,6 @@ def init_db():
             ('451° по Фаренгейту', 'Рэй Брэдбери', 1953)
         ]
         c.executemany("INSERT INTO books (name, author, year) VALUES (?, ?, ?)", books)
-
-    c.execute("SELECT id FROM users WHERE username = 'reader1'")
-    reader_id_row = c.fetchone()
-    if reader_id_row:
-        user_id = reader_id_row[0]
-
-    c.execute("SELECT id FROM books WHERE is_taken = 0 LIMIT 2")
-    book_ids = [row[0] for row in c.fetchall()]
-
-    for book_id in book_ids:
-        c.execute("INSERT OR IGNORE INTO user_books (user_id, book_id) VALUES (?, ?)", (user_id, book_id))
-        c.execute("UPDATE books SET is_taken = 1 WHERE id = ?", (book_id,))
 
     conn.commit()
     conn.close()

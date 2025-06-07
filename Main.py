@@ -7,7 +7,7 @@ from Read import get_books_html
 from Delete import delete_books_html
 from Create import open_new_book_form, save_new_book_form
 from Utils import get_logged_in_user
-from Auth import get_login_form, get_register_form
+from Auth import get_login_form, get_register_form, register_user, authenticate_user
 import os
 
 class MyTCPServer(socketserver.TCPServer):
@@ -86,6 +86,20 @@ class Handler(Handler):
             data = parse_qs(post_data)
             save_new_book_form(data)
             self.redirect('/')
+
+        elif path == '/login':
+            content_length = int(self.headers['Content-Length'])
+            post_data = self.rfile.read(content_length).decode('utf-8')
+            data = parse_qs(post_data)
+            authenticate_user(data)
+            self.redirect('/')
+            
+        elif path == '/register':
+            content_length = int(self.headers['Content-Length'])
+            post_data = self.rfile.read(content_length).decode('utf-8')
+            data = parse_qs(post_data)
+            register_user(data)
+            self.redirect('/login')
 
         else:
             self.send_html("<h1>Ошибка: неправильно заполнили форму.</h1>")

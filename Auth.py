@@ -1,5 +1,4 @@
 import sqlite3
-import hashlib
 
 def get_login_form():
     return """
@@ -54,10 +53,9 @@ def register_user(data):
     password = data.get('password', [''])[0]
 
     if username and password:
-        password_hash = hashlib.sha256(password.encode()).hexdigest()
         conn = sqlite3.connect('library.db')
         cursor = conn.cursor()
-        cursor.execute("INSERT INTO users (username, password) VALUES (?, ?)", (username, password_hash))
+        cursor.execute("INSERT INTO users (username, password) VALUES (?, ?)", (username, password))
         conn.commit()
         conn.close()
         return True
@@ -68,10 +66,9 @@ def authenticate_user(data):
     password = data.get('password', [''])[0]
 
     if username and password:
-        password_hash = hashlib.sha256(password.encode()).hexdigest()
         conn = sqlite3.connect('library.db')
         cursor = conn.cursor()
-        cursor.execute("SELECT id FROM users WHERE username=? AND password=?", (username, password_hash))
+        cursor.execute("SELECT id FROM users WHERE username=? AND password=?", (username, password))
         user = cursor.fetchone()
         conn.close()
         if user:
