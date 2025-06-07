@@ -137,6 +137,7 @@ class Handler(Handler):
             post_data = self.rfile.read(content_length).decode('utf-8')
             data = parse_qs(post_data)
             register_user(data)
+            self.redirect("/login")
 
         else:
             self.send_html("<h1>Ошибка: неправильно заполнили форму.</h1>")

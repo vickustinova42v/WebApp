@@ -32,6 +32,10 @@ body {
   scroll-behavior: smooth;
   text-rendering: optimizeSpeed;
   line-height: 1.5;
+  margin-left: 50px;
+  margin-right: 50px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 button[type="submit"] {
@@ -142,4 +146,42 @@ button, a {
 
 .input {
   margin-bottom: 1em;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header_logout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.logout-button {
+  color: white;
+  background-color: #243cc2;
+}
+
+.logout-button:hover {
+  background-color: #1c2f99;
+}
+
+.list_of_books {
+  margin-bottom: 15px;
+}
+
+.header_h {
+  margin-bottom: 5px;
+}
+
+.create-button-wrapp {
+  margin-bottom: 15px;
+}
+
+.logout-button-wrapp {
+  margin-left: 10px;
 }

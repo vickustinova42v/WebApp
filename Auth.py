@@ -68,6 +68,7 @@ def authenticate_user(data, handler):
         cursor = conn.cursor()
         cursor.execute("SELECT id FROM users WHERE username=? AND password=?", (username, password))
         user = cursor.fetchone()
+        conn.close()
 
         if user:
             user_id = user[0]
@@ -75,8 +76,25 @@ def authenticate_user(data, handler):
             handler.send_header('Set-Cookie', f'user_id={user_id}; Path=/')
             handler.send_header('Location', '/')
             handler.end_headers()
-
-        conn.close()
+        else:
+            error_html = f"""
+            <html>
+            <head>
+                <title>Вход</title>
+                <link rel="stylesheet" href="/static/style.css">
+            </head>
+            <body>
+                <div class="header_logout">
+                    <h2>Неверный логин или пароль</h2>
+                    <a class="logout-button"href="/login">Вернуться</a>
+                </div>
+            </body>
+            </html>
+            """
+            handler.send_response(200)
+            handler.send_header("Content-type", "text/html; charset=utf-8")
+            handler.end_headers()
+            handler.wfile.write(error_html.encode("utf-8"))
 
 def logout_user(handler):
     handler.send_response(302)
