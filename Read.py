@@ -13,6 +13,7 @@ def get_books_html():
     <html>
     <head>
         <title>Профиль</title>
+        <link rel="stylesheet" href="/static/style.css">
     </head>
     <body>
         <h1>Список книг</h1>

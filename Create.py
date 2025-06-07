@@ -5,6 +5,7 @@ def open_new_book_form():
     <html>
     <head>
         <title>Создание новой книги</title>
+        <link rel="stylesheet" href="/static/style.css">
     </head>
     <body>
         <form action="/create" method="POST">

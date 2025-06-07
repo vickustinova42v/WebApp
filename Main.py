@@ -1,4 +1,4 @@
-from http.server import HTTPServer, SimpleHTTPRequestHandler
+from http.server import HTTPServer, SimpleHTTPRequestHandler 
 from urllib.parse import urlparse, parse_qs
 import socketserver
 import sqlite3
@@ -6,6 +6,7 @@ from Init import init_db, DB_NAME
 from Read import get_books_html
 from Delete import delete_books_html
 from Create import open_new_book_form, save_new_book_form
+import os
 
 class MyTCPServer(socketserver.TCPServer):
     allow_reuse_address = True
@@ -20,22 +21,37 @@ class Handler(Handler):
         self.send_header("Content-type", "text/html; charset=utf-8")
         self.end_headers()
         self.wfile.write(html_str.encode('utf-8'))
+    
+    def redirect(self, location):
+        self.send_response(302)
+        self.send_header('Location', location)
+        self.end_headers()
 
     def do_GET(self):
         parsed_path = urlparse(self.path)
         path = parsed_path.path
         query = parse_qs(parsed_path.query)
 
+        if path.startswith("/static/"):
+            file_path = path.lstrip("/")
+            if os.path.exists(file_path):
+                self.send_response(200)
+                if file_path.endswith(".css"):
+                    self.send_header("Content-Type", "text/css")
+                elif file_path.endswith(".js"):
+                    self.send_header("Content-Type", "application/javascript")
+                elif file_path.endswith(".png"):
+                    self.send_header("Content-Type", "image/png")
+                self.end_headers()
+                with open(file_path, "rb") as f:
+                    self.wfile.write(f.read())
+            else:
+                self.send_error(404, "File Not Found")
+            return
+
         if path == '/':
             books_html = get_books_html()
             self.send_html(books_html)
-        
-        elif path == "/style.css":
-            self.send_response(200)
-            self.send_header('Content-type', 'text/css')
-            self.end_headers()
-            with open('static/style.css', 'rb') as file:
-                self.wfile.write(file.read())
 
         elif path == '/delete':
             book_id = query.get('id', [None])[0]
@@ -58,11 +74,15 @@ class Handler(Handler):
             post_data = self.rfile.read(content_length).decode('utf-8')
             data = parse_qs(post_data)
             save_new_book_form(data)
+
+            self.redirect('/')
+
         else:
             self.send_html("<h1>Ошибка: неправильно заполнили форму.</h1>")
 
 if __name__ == "__main__":
     init_db()
+    os.chdir('.')
     with MyTCPServer(("", PORT), Handler) as httpd:
         print(f"Сервер запущен на порту {PORT}")
         httpd.serve_forever()

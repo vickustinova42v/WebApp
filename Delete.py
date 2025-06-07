@@ -21,6 +21,7 @@ def delete_books_html(book_id):
     <html>
     <head>
         <title>Профиль</title>
+        <link rel="stylesheet" href="/static/style.css">
     </head>
     <body>
         <h1>{message}</h1>
