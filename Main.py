@@ -7,7 +7,7 @@ from Read import get_books_html
 from Delete import delete_books_html
 from Create import open_new_book_form, save_new_book_form
 from Utils import get_logged_in_user
-from Auth import get_login_form, get_register_form, register_user, authenticate_user
+from Auth import get_login_form, get_register_form, register_user, authenticate_user, logout_user
 import os
 
 class MyTCPServer(socketserver.TCPServer):
@@ -33,7 +33,6 @@ class Handler(Handler):
         parsed_path = urlparse(self.path)
         path = parsed_path.path
         query = parse_qs(parsed_path.query)
-        user_id = get_logged_in_user(self)
 
         if path.startswith("/static/"):
             file_path = path.lstrip("/")
@@ -53,26 +52,54 @@ class Handler(Handler):
             return
 
         if path == '/':
-            books_html = get_books_html()
+            user_id = get_logged_in_user(self)
+            if not user_id:
+                self.redirect("/login")
+                return
+            books_html = get_books_html(user_id)
             self.send_html(books_html)
 
         elif path == '/login':
+            user_id = get_logged_in_user(self)
+            if user_id:
+                self.redirect("/")
+                return
             login_html = get_login_form()
             self.send_html(login_html)
             
         elif path == '/register':
+            user_id = get_logged_in_user(self)
+            if user_id:
+                self.redirect("/")
+                return
             register_html = get_register_form()
             self.send_html(register_html)
 
         elif path == '/delete':
+            user_id = get_logged_in_user(self)
+            if not user_id:
+                self.redirect("/login")
+                return
             book_id = query.get('id', [None])[0]
             if book_id:
                 delete_books_html(book_id)
                 self.redirect('/')
 
         elif path == '/create':
+            user_id = get_logged_in_user(self)
+            if not user_id:
+                self.redirect("/login")
+                return
             open_book_html = open_new_book_form()
             self.send_html(open_book_html)
+        
+        elif path == "/logout":
+            user_id = get_logged_in_user(self)
+            if not user_id:
+                self.redirect("/login")
+                return
+            logout_user(self)
+
         else:
             self.send_error(404)
 
@@ -81,6 +108,10 @@ class Handler(Handler):
         path = parsed_path.path
 
         if path == '/create':
+            user_id = get_logged_in_user(self)
+            if not user_id:
+                self.redirect("/login")
+                return
             content_length = int(self.headers['Content-Length'])
             post_data = self.rfile.read(content_length).decode('utf-8')
             data = parse_qs(post_data)
@@ -88,18 +119,24 @@ class Handler(Handler):
             self.redirect('/')
 
         elif path == '/login':
+            user_id = get_logged_in_user(self)
+            if user_id:
+                self.redirect("/")
+                return
             content_length = int(self.headers['Content-Length'])
             post_data = self.rfile.read(content_length).decode('utf-8')
             data = parse_qs(post_data)
-            authenticate_user(data)
-            self.redirect('/')
+            authenticate_user(data, self)
             
         elif path == '/register':
+            user_id = get_logged_in_user(self)
+            if user_id:
+                self.redirect("/")
+                return
             content_length = int(self.headers['Content-Length'])
             post_data = self.rfile.read(content_length).decode('utf-8')
             data = parse_qs(post_data)
             register_user(data)
-            self.redirect('/login')
 
         else:
             self.send_html("<h1>Ошибка: неправильно заполнили форму.</h1>")

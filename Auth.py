@@ -58,10 +58,8 @@ def register_user(data):
         cursor.execute("INSERT INTO users (username, password) VALUES (?, ?)", (username, password))
         conn.commit()
         conn.close()
-        return True
-    return False
 
-def authenticate_user(data):
+def authenticate_user(data, handler):
     username = data.get('username', [''])[0]
     password = data.get('password', [''])[0]
 
@@ -70,7 +68,18 @@ def authenticate_user(data):
         cursor = conn.cursor()
         cursor.execute("SELECT id FROM users WHERE username=? AND password=?", (username, password))
         user = cursor.fetchone()
-        conn.close()
+
         if user:
-            return user[0]
-    return None
+            user_id = user[0]
+            handler.send_response(302)
+            handler.send_header('Set-Cookie', f'user_id={user_id}; Path=/')
+            handler.send_header('Location', '/')
+            handler.end_headers()
+
+        conn.close()
+
+def logout_user(handler):
+    handler.send_response(302)
+    handler.send_header('Set-Cookie', 'user_id=; Path=/; Max-Age=0')
+    handler.send_header('Location', '/login')
+    handler.end_headers()

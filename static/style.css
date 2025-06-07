@@ -124,6 +124,15 @@ button, a {
     background-color: #1c2f99;
 }
 
+.return-button {
+    color: white;
+    background-color: #243cc2;
+}
+
+.return-button:hover {
+    background-color: #1c2f99;
+}
+
 .form {
   display: flex;
   align-items: center;

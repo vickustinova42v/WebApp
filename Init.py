@@ -37,7 +37,7 @@ def init_db():
     
     c.execute("SELECT id FROM users WHERE username = 'admin'")
     if not c.fetchone():
-        c.execute("INSERT INTO users (username, password, role) VALUES (?, ?, ?)", ('admin','adminc', 'admin'))
+        c.execute("INSERT INTO users (username, password, role) VALUES (?, ?, ?)", ('admin', 'admin', 'admin'))
 
     c.execute("SELECT COUNT(*) FROM books")
     if c.fetchone()[0] == 0:
