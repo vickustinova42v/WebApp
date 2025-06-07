@@ -1,6 +1,10 @@
 import sqlite3
+import hashlib
 
 DB_NAME = "library.db"
+
+def hash_password(password):
+    return hashlib.sha256(password.encode('utf-8')).hexdigest()
 
 def init_db():
     conn = sqlite3.connect(DB_NAME)
@@ -34,10 +38,11 @@ def init_db():
             PRIMARY KEY (user_id, book_id)
         )
     ''')
-    
+
     c.execute("SELECT id FROM users WHERE username = 'admin'")
     if not c.fetchone():
-        c.execute("INSERT INTO users (username, password, role) VALUES (?, ?, ?)", ('admin', 'admin', 'admin'))
+        admin_password = hash_password('admin')
+        c.execute("INSERT INTO users (username, password, role) VALUES (?, ?, ?)", ('admin', admin_password, 'admin'))
 
     c.execute("SELECT COUNT(*) FROM books")
     if c.fetchone()[0] == 0:
