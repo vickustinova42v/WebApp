@@ -32,15 +32,12 @@ body {
   scroll-behavior: smooth;
   text-rendering: optimizeSpeed;
   line-height: 1.5;
-  margin-left: 50px;
-  margin-right: 50px;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin: 20px 50px;
 }
 
 button[type="submit"] {
-    outline: none;
-    border: none;
+  outline: none;
+  border: none;
 }
 
 ul[class],
@@ -78,63 +75,66 @@ select {
 }
 
 button, a {
-    padding: 5px 10px;
-    text-decoration: none;
-    border-radius: 4px;
+  padding: 5px 10px;
+  text-decoration: none;
+  border-radius: 4px;
 }
 
-.delete-button {
-    color: white;
-    background-color: #d9534f;
-}
-
-.delete-button:hover {
-    background-color: #c9302c;
-}
-
-.change-button {
-    color: white;
-    background-color: #243cc2;
-}
-
-.change-button:hover {
-    background-color: #1c2f99;
+.create-button,
+.delete-button,
+.change-button,
+.rent-button,
+.return-button {
+  min-width: 130px;
+  text-align: center;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+  padding: 5px 10px;
+  border: none;
 }
 
 .create-button {
-    color: white;
-    background-color: #24c231;
+  background-color: #24c231;
+}
+
+.create-button:hover {
+  background-color: #15701d;
+}
+
+.delete-button {
+  background-color: #f44336;
+}
+
+.delete-button:hover {
+  background-color: #c9302c;
+}
+
+.change-button {
+  background-color: #2196f3;
 }
 
 .change-button:hover {
-    background-color: #15701d;
+  background-color: #1c2f99;
 }
 
 .rent-button {
-    color: rgb(0, 0, 0);
-    background-color: #f1fe03;
+  background-color: #f1fe03;
+  color: #000;
 }
 
 .rent-button:hover {
-    background-color: #c5c800;
+  background-color: #c5c800;
 }
 
 .return-button {
-    color: white;
-    background-color: #243cc2;
+  background-color: #9c27b0;
 }
 
 .return-button:hover {
-    background-color: #1c2f99;
-}
-
-.return-button {
-    color: white;
-    background-color: #243cc2;
-}
-
-.return-button:hover {
-    background-color: #1c2f99;
+  background-color: #7b1fa2;
 }
 
 .form {
@@ -150,8 +150,10 @@ button, a {
 
 .header {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .header_logout {
@@ -170,8 +172,8 @@ button, a {
   background-color: #1c2f99;
 }
 
-.list_of_books {
-  margin-bottom: 15px;
+.logout-button-wrapp {
+  margin-left: auto;
 }
 
 .header_h {
@@ -179,9 +181,42 @@ button, a {
 }
 
 .create-button-wrapp {
-  margin-bottom: 15px;
+  margin: 20px 0;
 }
 
-.logout-button-wrapp {
-  margin-left: 10px;
+.list_of_books {
+  display: grid;
+  grid-template-columns: 60px 1fr 1fr 80px auto;
+  gap: 10px;
+  align-items: center;
+  padding: 10px;
+  margin: 10px 0;
+  border-bottom: 1px solid #ccc;
+}
+
+.list_of_books span {
+  white-space: nowrap;
+}
+
+.list_of_books a {
+  margin-right: 5px;
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  grid-gap: 3px;
+}
+
+.unavailable-button {
+  color: white;
+  background-color: #999;
+  cursor: not-allowed;
+  pointer-events: none;
+  opacity: 0.7;
+  border-radius: 4px;
+  padding: 5px 10px;
+  text-decoration: none;
 }

@@ -4,7 +4,7 @@ def get_books_html(user_id):
     conn = sqlite3.connect("library.db")
     cursor = conn.cursor()
 
-    cursor.execute("SELECT username, role FROM users WHERE id = ?", (user_id))
+    cursor.execute("SELECT username, role FROM users WHERE id = ?", (user_id,))
     result = cursor.fetchone()
     username = result[0] if result else "Незнакомец"
     role = result[1] if result else "reader"
@@ -47,26 +47,36 @@ def get_books_html(user_id):
         html += f"""
             <div class="list_of_books">
                 <span><b>ID-{book_id}. </b></span>
-                <span>{name}, </span>
-                <span>{author}, </span>
+                <span>{name}</span>
+                <span>{author}</span>
                 <span>{year}</span>
         """
 
-        if role == "admin" and not is_taken:
-            html += f"""
-                <a class="delete-button" href="/delete?id={book_id}">Удалить</a>
-                <a class="change-button" href="/update?id={book_id}">Изменить</a>
-            """
-
-        if role == "reader" and not is_taken:
-            html += f"""
-                <a class="rent-button" href="/rent?id={book_id}">Взять в аренду</a>
-            """
-
-        if role == "reader" and is_taken_by_user:
-            html += f"""
-                <a class="return-button" href="/return?id={book_id}">Вернуть</a>
-            """
+        if role == "admin":
+            if not is_taken:
+                html += f"""
+                    <div class="buttons">
+                        <a class="delete-button" href="/delete?id={book_id}">Удалить</a>
+                        <a class="change-button" href="/update?id={book_id}">Изменить</a>
+                    </div>
+                """
+            else:
+                html += f"""
+                    <a class="unavailable-button">Книга занята</a>
+                """
+        elif role == "reader":
+            if is_taken_by_user:
+                html += f"""
+                    <a class="return-button" href="/return?id={book_id}">Вернуть</a>
+                """
+            elif not is_taken:
+                html += f"""
+                    <a class="rent-button" href="/rent?id={book_id}">Взять в аренду</a>
+                """
+            else:
+                html += f"""
+                    <a class="unavailable-button">Книга занята</a>
+                """
 
         html += "</div>"
 
