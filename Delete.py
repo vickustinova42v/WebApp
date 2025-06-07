@@ -11,21 +11,5 @@ def delete_books_html(book_id):
         name, author = result
         cursor.execute("DELETE FROM books WHERE id = ?", (book_id,))
         conn.commit()
-        message = f"Книга «{name}» автора {author} успешно удалена."
-    else:
-        message = f"Книга с ID {book_id} не найдена."
 
     conn.close()
-
-    return f"""
-    <html>
-    <head>
-        <title>{message}</title>
-        <link rel="stylesheet" href="/static/style.css">
-    </head>
-    <body>
-        <h1>{message}</h1>
-        <a href='/'>На главную</a>
-    </body>
-    </html>
-    """

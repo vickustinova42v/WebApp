@@ -8,19 +8,21 @@ def open_new_book_form():
         <link rel="stylesheet" href="/static/style.css">
     </head>
     <body>
-        <form action="/create" method="POST">
-            <label for="name">Название книги:</label><br>
-            <input type="text" id="name" name="name" required><br><br>
+        <div class="form">
+            <form class="form" action="/create" method="POST">
+                <label for="name">Название книги:</label>
+                <input class="input" type="text" id="name" name="name" required>
 
-            <label for="author">Автор:</label><br>
-            <input type="text" id="author" name="author" required><br><br>
+                <label for="author">Автор:</label>
+                <input class="input" type="text" id="author" name="author" required>
 
-            <label for="year">Год:</label><br>
-            <input type="number" id="year" name="year" required><br><br>
+                <label for="year">Год:</label>
+                <input class="input" type="number" id="year" name="year" required>
 
-            <button type="submit">Добавить книгу</button>
-        </form>
-        <a href='/'>На главную</a>
+                <button class="create-button" type="submit">Добавить книгу</button>
+            </form>
+            <a class="return-button" href='/'>На главную</a>
+        </div>
     </body>
     </html>
     """

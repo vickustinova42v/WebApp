@@ -6,6 +6,8 @@ from Init import init_db, DB_NAME
 from Read import get_books_html
 from Delete import delete_books_html
 from Create import open_new_book_form, save_new_book_form
+from Utils import get_logged_in_user
+from Auth import get_login_form, get_register_form
 import os
 
 class MyTCPServer(socketserver.TCPServer):
@@ -31,6 +33,7 @@ class Handler(Handler):
         parsed_path = urlparse(self.path)
         path = parsed_path.path
         query = parse_qs(parsed_path.query)
+        user_id = get_logged_in_user(self)
 
         if path.startswith("/static/"):
             file_path = path.lstrip("/")
@@ -53,11 +56,19 @@ class Handler(Handler):
             books_html = get_books_html()
             self.send_html(books_html)
 
+        elif path == '/login':
+            login_html = get_login_form()
+            self.send_html(login_html)
+            
+        elif path == '/register':
+            register_html = get_register_form()
+            self.send_html(register_html)
+
         elif path == '/delete':
             book_id = query.get('id', [None])[0]
             if book_id:
-                delete_html = delete_books_html(book_id)
-                self.send_html(delete_html)
+                delete_books_html(book_id)
+                self.redirect('/')
 
         elif path == '/create':
             open_book_html = open_new_book_form()
@@ -74,7 +85,6 @@ class Handler(Handler):
             post_data = self.rfile.read(content_length).decode('utf-8')
             data = parse_qs(post_data)
             save_new_book_form(data)
-
             self.redirect('/')
 
         else:
